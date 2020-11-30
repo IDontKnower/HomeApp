@@ -21,7 +21,7 @@ namespace HomeApp.WebApi.DTO.OpenWeatherApi.Daily
         public DailyTemperature DailyFeelsTemperature { get; set; }
 
         [JsonPropertyName("pressure")]
-        public int Pressure { get; set; }
+        public float Pressure { get; set; }
 
         [JsonPropertyName("humidity")]
         public int Humidity { get; set; }

@@ -9,7 +9,7 @@ namespace HomeApp.WebApi.Model.OpenWeatherApi.Daily
         public int Sunset { get; set; }
         public DailyTemperature DailyTemperature { get; set; }
         public DailyTemperature DailyFeelsTemperature { get; set; }
-        public int Pressure { get; set; }
+        public float Pressure { get; set; }
         public int Humidity { get; set; }
         public float WindSpeed { get; set; }
         public int WindDegree { get; set; }

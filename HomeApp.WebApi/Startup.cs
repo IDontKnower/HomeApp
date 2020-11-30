@@ -1,7 +1,6 @@
 using AutoMapper;
 using HomeApp.WebApi.Contracts;
 using HomeApp.WebApi.Mappers;
-using HomeApp.WebApi.Providers;
 using HomeApp.WebApi.Services;
 using HomeApp.WebApi.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -36,8 +35,8 @@ namespace HomeApp.WebApi
             });
             RegisterSettings(services);
             RegisterJwtAuth(services);
-            RegisterServices(services);
             RegisterMapperProfiles(services);
+            RegisterServices(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
