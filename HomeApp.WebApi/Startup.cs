@@ -1,4 +1,6 @@
+using AutoMapper;
 using HomeApp.WebApi.Contracts;
+using HomeApp.WebApi.Mappers;
 using HomeApp.WebApi.Providers;
 using HomeApp.WebApi.Services;
 using HomeApp.WebApi.Settings;
@@ -35,6 +37,7 @@ namespace HomeApp.WebApi
             RegisterSettings(services);
             RegisterJwtAuth(services);
             RegisterServices(services);
+            RegisterMapperProfiles(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,13 +66,6 @@ namespace HomeApp.WebApi
         {
             services.AddSingleton(Configuration.GetSection(nameof(AuthSettings)).Get<AuthSettings>());
             services.AddSingleton(Configuration.GetSection(nameof(WeatherSettings)).Get<WeatherSettings>());
-
-            //var jsonSettings = JsonSettingsProvider.GetSettings();
-            //foreach (var settings in jsonSettings)
-            //{
-            //    var config = Configuration.GetSection(settings.Name).Get(settings);
-            //    services.AddSingleton(config);
-            //}
         }
 
         private void RegisterJwtAuth(IServiceCollection services)
@@ -112,6 +108,11 @@ namespace HomeApp.WebApi
         private void RegisterServices(IServiceCollection services)
         {
             services.AddScoped<IWeatherService, OpenWeatherService>();
+        }
+
+        private void RegisterMapperProfiles(IServiceCollection services)
+        {
+            services.AddAutoMapper(typeof(WeatherProfile));
         }
     }
 }

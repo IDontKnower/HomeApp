@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using Dawn;
 using HomeApp.WebApi.Contracts;
+using HomeApp.WebApi.Model.OpenWeatherApi;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace HomeApp.WebApi.Controllers
 {
@@ -15,14 +18,18 @@ namespace HomeApp.WebApi.Controllers
     {
         private readonly IWeatherService _weatherService;
         private readonly ILogger _logger;
+        private readonly IMapper _mapper;
 
-        public WeatherForecastController(IWeatherService weatherService, ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(IWeatherService weatherService, ILogger logger,
+            IMapper mapper)
         {
             Guard.Argument(weatherService, nameof(weatherService)).NotNull();
             Guard.Argument(logger, nameof(logger)).NotNull();
+            Guard.Argument(mapper, nameof(mapper)).NotNull();
 
             _weatherService = weatherService;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -31,12 +38,13 @@ namespace HomeApp.WebApi.Controllers
             try
             {
                 var weatherForecast = await _weatherService.GetWeatherForecast(latitude, longitude);
-                return Ok(weatherForecast);
+                var mappedResult = _mapper.Map<OpenWeatherResponse>(weatherForecast);
+                return Ok(mappedResult);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error while getting weather forecast");
-                return Forbid();
+                _logger.Error(e, "Error while getting weather forecast");
+                return StatusCode(StatusCodes.Status500InternalServerError, e);
             }
         }
     }

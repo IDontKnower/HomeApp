@@ -5,9 +5,9 @@ using Dawn;
 using HomeApp.WebApi.Contracts;
 using HomeApp.WebApi.DTO.OpenWeatherApi;
 using HomeApp.WebApi.Settings;
-using Microsoft.Extensions.Logging;
 using RestSharp;
 using RestSharp.Serializers.SystemTextJson;
+using Serilog;
 
 namespace HomeApp.WebApi.Services
 {
@@ -17,7 +17,8 @@ namespace HomeApp.WebApi.Services
         private readonly RestClient _weatherClient;
         private readonly Dictionary<string, string> _defaultParameters;
 
-        public OpenWeatherService(WeatherSettings weatherSettings, ILogger<OpenWeatherService> logger)
+
+        public OpenWeatherService(WeatherSettings weatherSettings, ILogger logger)
         {
             Guard.Argument(weatherSettings, nameof(weatherSettings)).NotNull();
             Guard.Argument(logger, nameof(logger)).NotNull();
@@ -52,16 +53,6 @@ namespace HomeApp.WebApi.Services
                         Console.WriteLine(e);
                         throw;
                 }
-                //try
-                //{
-                //    var config = JsonConvert.DeserializeObject<OpenWeatherResponse>(response.Content);
-                //    return config;
-                //}
-                //catch (Exception e)
-                //{
-                //    Console.WriteLine(e);
-                //    throw;
-                //}
             }
             catch (Exception e)
             {
