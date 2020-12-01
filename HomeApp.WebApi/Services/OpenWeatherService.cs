@@ -14,18 +14,19 @@ namespace HomeApp.WebApi.Services
     public class OpenWeatherService: IWeatherService
     {
         private readonly ILogger _logger;
-        private readonly RestClient _weatherClient;
+        private readonly IRestClient _weatherClient;
         private readonly Dictionary<string, string> _defaultParameters;
 
 
-        public OpenWeatherService(WeatherSettings weatherSettings, ILogger logger)
+        public OpenWeatherService(WeatherSettings weatherSettings, ILogger logger, IRestClient restClient)
         {
             Guard.Argument(weatherSettings, nameof(weatherSettings)).NotNull();
             Guard.Argument(logger, nameof(logger)).NotNull();
+            Guard.Argument(restClient, nameof(restClient)).NotNull();
 
             _logger = logger;
-            _weatherClient = new RestClient(weatherSettings.ApiUrl);
-            _weatherClient.UseSystemTextJson();
+            _weatherClient = restClient;
+            _weatherClient.BaseUrl = new Uri(weatherSettings.ApiUrl);
             _defaultParameters = new Dictionary<string, string>()
                 {
                     {"appid", weatherSettings.ApiKey},

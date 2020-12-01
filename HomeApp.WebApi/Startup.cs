@@ -12,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using RestSharp;
+using RestSharp.Serializers.SystemTextJson;
 
 namespace HomeApp.WebApi
 {
@@ -107,6 +109,13 @@ namespace HomeApp.WebApi
         private void RegisterServices(IServiceCollection services)
         {
             services.AddScoped<IWeatherService, OpenWeatherService>();
+
+            services.AddTransient<IRestClient, RestClient>(ctx =>
+            {
+                var restClient = new RestClient();
+                restClient.UseSystemTextJson();
+                return restClient;
+            });
         }
 
         private void RegisterMapperProfiles(IServiceCollection services)
