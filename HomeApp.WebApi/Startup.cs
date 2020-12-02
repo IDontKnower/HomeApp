@@ -67,6 +67,7 @@ namespace HomeApp.WebApi
         {
             services.AddSingleton(Configuration.GetSection(nameof(AuthSettings)).Get<AuthSettings>());
             services.AddSingleton(Configuration.GetSection(nameof(WeatherSettings)).Get<WeatherSettings>());
+            services.AddSingleton(Configuration.GetSection(nameof(DbSettings)).Get<DbSettings>());
         }
 
         private void RegisterJwtAuth(IServiceCollection services)
