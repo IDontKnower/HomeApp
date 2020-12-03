@@ -1,4 +1,4 @@
-﻿namespace HomeApp.WebApi.Contexts.ShoppingList.Models
+﻿namespace HomeApp.WebApi.Contexts.ShoppingList
 {
     public class Product
     {

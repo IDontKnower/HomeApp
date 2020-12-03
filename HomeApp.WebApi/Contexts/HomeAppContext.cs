@@ -1,6 +1,6 @@
 ﻿using System;
 using Dawn;
-using HomeApp.WebApi.Contexts.ShoppingList.Models;
+using HomeApp.WebApi.Contexts.ShoppingList;
 using HomeApp.WebApi.Settings;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,10 +33,14 @@ namespace HomeApp.WebApi.Contexts
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name).IsRequired();
-                entity.Property(e => e.Description).HasColumnType("text");
-                entity.Property(e => e.Amount).IsRequired();
-                entity.Property(e => e.IsBought).IsRequired();
+                entity.Property(e => e.Name)
+                    .IsRequired();
+                entity.Property(e => e.Description)
+                    .HasColumnType("text");
+                entity.Property(e => e.Amount)
+                    .IsRequired();
+                entity.Property(e => e.IsBought)
+                    .IsRequired();
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Products);
             });
@@ -44,7 +48,8 @@ namespace HomeApp.WebApi.Contexts
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name).IsRequired();
+                entity.Property(e => e.Name)
+                    .IsRequired();
             });
         }
     }
