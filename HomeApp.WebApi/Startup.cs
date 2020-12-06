@@ -1,4 +1,5 @@
 using AutoMapper;
+using HomeApp.WebApi.Contexts;
 using HomeApp.WebApi.Contracts;
 using HomeApp.WebApi.Mappers;
 using HomeApp.WebApi.Services;
@@ -19,8 +20,11 @@ namespace HomeApp.WebApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IWebHostEnvironment _env;
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
+            _env = env;
             Configuration = configuration;
         }
 
@@ -39,6 +43,15 @@ namespace HomeApp.WebApi
             RegisterJwtAuth(services);
             RegisterMapperProfiles(services);
             RegisterServices(services);
+
+            if (_env.IsDevelopment())
+            {
+                var dbSettings = Configuration.GetSection(nameof(DbSettings)).Get<DbSettings>();
+                var dbContext = new HomeAppContext(dbSettings);
+                dbContext.RecreateDatabase();
+                var sampleDataService = new SampleDataService(dbContext);
+                sampleDataService.AddSampleData();
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,7 +69,6 @@ namespace HomeApp.WebApi
             app.UseAuthentication();
             app.UseAuthorization();
             
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -117,11 +129,13 @@ namespace HomeApp.WebApi
                 restClient.UseSystemTextJson();
                 return restClient;
             });
+            services.AddScoped<HomeAppContext>();
         }
 
         private void RegisterMapperProfiles(IServiceCollection services)
         {
             services.AddAutoMapper(typeof(WeatherProfile));
+            services.AddAutoMapper(typeof(ShoppingListProfile));
         }
     }
 }

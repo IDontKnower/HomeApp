@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HomeApp.WebApi.Contexts
 {
-    public class HomeAppContext: DbContext
+    public sealed class HomeAppContext: DbContext
     {
         private readonly string _connectionString;
 
@@ -14,7 +14,15 @@ namespace HomeApp.WebApi.Contexts
         {
             Guard.Argument(dbSettings, nameof(dbSettings)).NotNull();
             _connectionString = dbSettings.ToString();
+
         }
+
+        public void RecreateDatabase()
+        {
+            Database.EnsureDeleted();
+            Database.EnsureCreated();
+        }
+        
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
 
